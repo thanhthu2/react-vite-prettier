@@ -1,33 +1,42 @@
 import { useState } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 import { publicRoutes } from '~/routes'
 
-function App() {
-  const [count, setCount] = useState(0)
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#ec5990'
+    }
+  }
+})
 
+function App() {
   return (
-    <Router>
-      <div className='App'>
-        <Routes>
-          {publicRoutes.map((route, idx) => {
-            const Layout = route.layout
-            const Page = route.component
-            return (
-              <Route
-                key={idx}
-                path={route.path}
-                element={
-                  <Layout>
-                    <Page />
-                  </Layout>
-                }
-              ></Route>
-            )
-          })}
-        </Routes>
-      </div>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <div className='App'>
+          <Routes>
+            {publicRoutes.map((route, idx) => {
+              const Layout = route.layout
+              const Page = route.component
+              return (
+                <Route
+                  key={idx}
+                  path={route.path}
+                  element={
+                    <Layout>
+                      <Page />
+                    </Layout>
+                  }
+                ></Route>
+              )
+            })}
+          </Routes>
+        </div>
+      </Router>
+    </ThemeProvider>
   )
 }
 

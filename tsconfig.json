@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["react-hook-form"],
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
