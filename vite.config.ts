@@ -9,6 +9,12 @@ export default defineConfig({
     port: 3000
   },
   css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "~/styles/colors.scss";`
+      }
+    },
+  
     devSourcemap: true
   },
   resolve: {
