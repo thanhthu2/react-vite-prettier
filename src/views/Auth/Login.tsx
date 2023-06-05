@@ -1,8 +1,10 @@
-import { Container, TextField, Button, Typography, Link, Grid } from '@mui/material'
-import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { Button, Container, Grid, Link, TextField, Typography } from '@mui/material'
+import { SubmitHandler, useForm, FormProvider } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import * as yup from 'yup'
+
+import { DynamicForm } from '~/components'
 
 import { SignIn } from './auth.model'
 import styles from './auth.module.scss'
@@ -12,16 +14,49 @@ const schema = yup.object().shape({
   password: yup.string().min(4).max(20).required()
 })
 
+const FormsLogin = [
+  {
+    name: 'email',
+    defaultValue: '',
+    component: TextField,
+    componentProps: {
+      label: 'Email',
+      type: 'email',
+      fullWidth: true,
+      variant: 'outlined',
+      margin: 'normal'
+    },
+    colsProps: {
+      xl: 12,
+      sm: 12,
+      md: 12,
+      xs: 12
+    }
+  },
+  {
+    name: 'password',
+    defaultValue: '',
+    component: TextField,
+    componentProps: {
+      label: 'Password',
+      type: 'password',
+      fullWidth: true,
+      variant: 'outlined',
+      margin: 'normal'
+    },
+    colsProps: {
+      xl: 12,
+      sm: 12,
+      md: 12,
+      xs: 12
+    }
+  }
+]
+
 function Login() {
   const navigate = useNavigate()
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    formState: { errors }
-  } = useForm<SignIn>({ resolver: yupResolver(schema) })
+  const methods = useForm<SignIn>({ resolver: yupResolver(schema) })
 
   const onSubmit: SubmitHandler<SignIn> = (data) => {
     console.log(data)
@@ -29,52 +64,17 @@ function Login() {
 
   return (
     <Container className={styles.container}>
-      <form>
+      <main className={styles.main}>
         <Typography align='center' variant='h3' color='primary'>
           Login
         </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Controller
-              name='email'
-              control={control}
-              defaultValue=''
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label='Email'
-                  type='email'
-                  variant='outlined'
-                  fullWidth
-                  margin='normal'
-                  error={!!errors.email}
-                  helperText={errors.email ? errors.email?.message : ''}
-                />
-              )}
-            />
+        <FormProvider {...methods}>
+          <Grid container spacing={2}>
+            <DynamicForm FormsLogin={FormsLogin} />
           </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Controller
-              name='password'
-              control={control}
-              defaultValue=''
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label='Password'
-                  type='password'
-                  variant='outlined'
-                  fullWidth
-                  margin='normal'
-                  error={!!errors.password}
-                  helperText={errors.password ? errors.password?.message : ''}
-                />
-              )}
-            />
-          </Grid>
-        </Grid>
+        </FormProvider>
         <Button
-          onClick={handleSubmit(onSubmit)}
+          onClick={methods.handleSubmit(onSubmit)}
           variant='contained'
           color='primary'
           fullWidth
@@ -92,7 +92,7 @@ function Login() {
         >
           Don't have an account? Sign Up
         </Link>
-      </form>
+      </main>
     </Container>
   )
 }
