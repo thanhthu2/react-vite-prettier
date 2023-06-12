@@ -14,10 +14,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useNavigate } from 'react-router-dom'
 
-import { ISignUp, Gender } from './auth.model'
+import { ISignUp } from './auth.model'
 import styles from './auth.module.scss'
+import { GENDERS } from '~/enums/user.enum'
 
 const schema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
   email: yup.string().email().required(),
   password: yup.string().min(4).max(20).required(),
   confirmPassword: yup
@@ -152,7 +155,7 @@ function SignUp() {
               <Controller
                 name='gender'
                 control={control}
-                defaultValue={Gender.Male}
+                defaultValue={GENDERS.MALE}
                 rules={{ required: 'Vui lòng chọn giới tính' }}
                 render={({ field, fieldState: { error } }) => (
                   <RadioGroup {...field} aria-label='gender' row>

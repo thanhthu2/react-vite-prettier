@@ -1,16 +1,12 @@
+import { GENDERS } from "~/enums/user.enum"
+
 export interface ISignUp {
   firstName: string
   lastName: string
   email: string
   password: string
   confirmPassword: string,
-  gender: Gender
-}
-
-export enum Gender {
-  Male = "male",
-  Female = "female",
-  Other = "other"
+  gender: GENDERS
 }
 
 export interface SignIn
