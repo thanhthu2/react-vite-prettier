@@ -26,10 +26,10 @@ axiosIntance.interceptors.response.use(
 );
 
 const handleError = async (error: AxiosError) => {
-  console.log(error)
+  return Promise.reject(error.message)
 };
 
-export function transformRequest<T>(config: AxiosResponse<T>) {
+export function transformRequest<T>(config: AxiosRequestConfig<T>) {
   return axiosIntance.request(config).then(
     (val: AxiosResponse<T>) => [null, val || val] as unknown as [null, T],
     (err: AxiosError) => [err, null] as [AxiosError, null]

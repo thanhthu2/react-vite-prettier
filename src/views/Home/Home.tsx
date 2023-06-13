@@ -11,15 +11,23 @@ function Home() {
 
   const fetch = async () => {
     const [err, res] = await service.mock.fetchPost()
-
-    debugger
     if (err) {
-      
       setOpen(true)
     } else {
       setListData(res)
     }
   }
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   useEffect(() => {
     fetch()
@@ -30,7 +38,10 @@ function Home() {
       {listData.map((data) => {
         return <li> {JSON.stringify(data)}</li>
       })}
-      <Snackbar open={open} autoHideDuration={6000} message='Note archived'>
+      <Snackbar  open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        message="Note archived">
         <Alert severity='error' sx={{ width: '100%' }}>
           This is a success message!
         </Alert>
